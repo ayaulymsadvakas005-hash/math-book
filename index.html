@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>📊 Ықтималдық және Статистика: Электронды Оқулық</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* ======================================================= */
+        /* 1. ЖАЛПЫ СТИЛЬДЕР (CSS) - V6.1 LIGHT MODE               */
+        /* ======================================================= */
+        
+        :root {
+            --bg-light: #f0f2f5; 
+            --bg-card: #ffffff; 
+            --text-dark: #333333; 
+            --text-secondary: #555555; 
+            
+            --primary-accent: #3b82f6; /* Көгілдір */
+            --secondary-accent: #10b981; /* Жасыл */
+            --success: #28a745; 
+            --error: #dc3545; 
+            
+            --border-color-light: #e0e0e0; 
+            --shadow-light: 0 4px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; transition: all 0.3s ease-in-out; }
+        body { 
+            font-family: 'Quicksand', sans-serif; 
+            background-color: var(--bg-light); 
+            color: var(--text-dark); 
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Quicksand', sans-serif; font-weight: 700; color: var(--text-dark); }
+
+        /* --- COVER PAGE --- */
+        #cover {
+            min-height: 100vh; display: flex; align-items: center; justify-content: center; text-align: center;
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb); 
+        }
+        .cover-content {
+            background-color: var(--bg-card); padding: 50px; border-radius: 15px;
+            box-shadow: var(--shadow-light); 
+            border: 1px solid var(--primary-accent);
+            max-width: 900px; width: 95%;
+        }
+        .cover-content h1 { font-size: 3.2rem; color: var(--primary-accent); }
+        .cover-content h2 { font-size: 1.5rem; color: var(--text-dark); opacity: 0.8; margin-bottom: 30px; }
+        .logo-icon { font-size: 80px; color: var(--secondary-accent); margin-bottom: 20px; }
+        
+        .start-btn {
+            background: var(--primary-accent); color: white; border: none; padding: 15px 60px;
+            font-size: 1.2rem; font-weight: 700; border-radius: 8px; cursor: pointer;
+            box-shadow: var(--shadow-light); transition: background 0.3s;
+        }
+        .start-btn:hover { background: #2563eb; } 
+
+        /* --- APP STRUCTURE & STICKY NAV --- */
+        #app { display: none; }
+        
+        .header-nav {
+            position: sticky; top: 0; z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-light);
+            padding: 10px 0;
+            border-bottom: 2px solid var(--primary-accent);
+        }
+        
+        .nav-list {
+            display: flex; justify-content: center; gap: 30px;
+            list-style: none; padding: 0; margin: 0;
+            flex-wrap: wrap;
+        }
+        .nav-link {
+            text-decoration: none; color: var(--text-dark); font-weight: 600;
+            padding: 10px 15px; border-radius: 5px;
+            transition: background 0.2s, color 0.2s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .nav-link:hover { background: rgba(0, 0, 0, 0.05); color: var(--primary-accent); }
+        .nav-link.active { background: var(--primary-accent); color: white; }
+
+        /* --- MAIN CONTENT LAYOUT --- */
+        main { max-width: 1200px; margin: 40px auto; padding: 0 20px 50px 20px; }
+        
+        .section { display: none; padding: 30px; background-color: var(--bg-card); border-radius: 15px; margin-bottom: 30px; box-shadow: var(--shadow-light); }
+        .section.active { display: block; }
+        
+        h2 { color: var(--primary-accent); border-bottom: 1px solid var(--border-color-light); padding-bottom: 10px; margin-bottom: 30px; }
+        h3 { color: var(--secondary-accent); margin-top: 25px; }
+
+        /* --- CARDS & INTERACTIVITY --- */
+        .grid-layout { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        
+        .module-card {
+            background-color: var(--bg-card); border-radius: 10px; padding: 20px; 
+            box-shadow: var(--shadow-light); border-left: 5px solid var(--primary-accent);
+            cursor: pointer; transition: transform 0.2s;
+        }
+        .module-card:hover { transform: translateY(-5px); background-color: #f8f8f8; }
+        
+        .icon-small { color: var(--secondary-accent); margin-right: 10px; }
+
+        /* Quiz & Practice Styles */
+        .quiz-opt {
+            background-color: #f7f7f7; padding: 15px; border-radius: 8px; margin-bottom: 10px;
+            cursor: pointer; border: 1px solid var(--border-color-light); transition: background-color 0.2s;
+            color: var(--text-dark);
+        }
+        .quiz-opt.selected { border-color: var(--primary-accent); background-color: #e3f2fd; color: var(--primary-accent); }
+        .quiz-opt.correct { background-color: var(--success); color: white; font-weight: 600; }
+        .quiz-opt.wrong { background-color: var(--error); color: white; font-weight: 600; }
+        
+        .sim-panel button { background: var(--secondary-accent); color: white; font-weight: 700; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+
+        /* Модаль терезелер */
+        .modal { display: none; position: fixed; z-index: 1001; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.6); justify-content: center; align-items: center; }
+        .modal-content { background-color: var(--bg-card); margin: auto; padding: 40px; border-radius: 15px; box-shadow: var(--shadow-light); width: 80%; max-width: 800px; position: relative; color: var(--text-dark); }
+        .close-btn { position: absolute; top: 20px; right: 30px; color: var(--text-secondary); font-size: 35px; font-weight: bold; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div id="theoryModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" onclick="document.getElementById('theoryModal').style.display='none'">&times;</span>
+            <div id="theoryModalBody"></div>
+        </div>
+    </div>
+
+    <div id="videoModal" class="modal">
+        <div class="modal-content" style="background:var(--bg-card); padding:0; width:90%; max-width:1000px; aspect-ratio:16/9; display:flex; border:none; box-shadow:none;">
+            <video id="fullVideo" controls style="width:100%; height:100%; border-radius:15px;">
+                <source src="your_video_source.mp4" type="video/mp4">
+            </video>
+            <span class="close-btn" style="color:white; right:10px; top:10px; text-shadow:0 0 5px rgba(0,0,0,0.5);" onclick="closeVideoModal()">&times;</span>
+        </div>
+    </div>
+
+    <div id="cover">
+        <div class="cover-content">
+            <p style="opacity:0.6; font-size:14px;">ҚР Ғылым және жоғары білім министрлігі</p>
+            <p style="font-weight:600; color:var(--primary-accent); margin-bottom:20px;">Е.А. Бөкетов атындағы Қарағанды Ұлттық Зерттеу университеті</p>
+            
+            <div class="logo-icon"><i class="fas fa-chart-pie"></i></div>
+            
+            <h1 style="font-size:3.2rem;">ЫҚТИМАЛДЫҚ ЖӘНЕ СТАТИСТИКА</h1>
+            <h2> Электрондық оқу-әдістемелік құрал</h2>
+            
+            <button class="start-btn" onclick="startApp()">САБАҚТЫ БАСТАУ</button>
+
+            <div style="margin-top:40px; font-size:14px; opacity:0.7;">
+                <span><i class="fas fa-user-edit"></i> Орындаған: Садвақас Аяулым</span> |
+                <span><i class="fas fa-users"></i> Тобы: МиИ-22-1к</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="app">
+        
+        <header class="header-nav">
+            <ul class="nav-list" id="navList"></ul>
+        </header>
+
+        <main id="main-content">
+            
+            <section id="home" class="section active">
+                <h2 style="color: var(--text-dark); border-bottom-color: var(--secondary-accent);">Басты бет </h2>
+                <p style="font-size:1.1rem; margin-bottom:20px;">Қош келдіңіз! Сіздің прогрессіңіз және негізгі модульдеріңіз:</p>
+                
+                <div class="grid-layout">
+                    <div class="module-card" style="border-left-color: var(--secondary-accent);" onclick="nav('theory')">
+                        <h3><i class="fas fa-book-open icon-small"></i> Теориялық база</h3>
+                        <p style="color:var(--text-secondary)">10 Негізгі тақырып.</p>
+                    </div>
+                    <div class="module-card" onclick="nav('test1')">
+                        <h3><i class="fas fa-check-square icon-small"></i> Тестілеу</h3>
+                        <p style="color:var(--text-secondary)">Біліміңізді 10 сұрақ арқылы тексеріңіз.</p>
+                    </div>
+                    <div class="module-card" style="border-left-color: var(--success);" onclick="nav('game')">
+                        <h3><i class="fas fa-code-branch icon-small"></i> Симуляция</h3>
+                        <p style="color:var(--text-secondary)">Ықтималдық заңдарын тәжірибеде көріңіз.</p>
+                    </div>
+                </div>
+
+                <div style="margin-top:30px; padding:20px; background:#f8f9fa; border-radius:10px; box-shadow:var(--shadow-light);">
+                    <h4><i class="fas fa-chart-line icon-small"></i> Сіздің прогресіңіз</h4>
+                    <p style="color:var(--text-secondary)">Қазіргі деңгейіңіз: LVL <span id="lvl">1</span> (<span id="xpVal">0</span> XP)</p>
+                    <div class="xp-progress" style="background:#e9ecef; height:10px; border-radius:5px; margin-top:10px;">
+                        <div class="xp-fill" id="xpFill" style="background:var(--primary-accent); height:100%; width:0%; border-radius:5px;"></div>
+                    </div>
+                </div>
+            </section>
+
+           <section id="intro" class="section">
+    <h2>Алғы сөз</h2>
+    <p>Құрметті оқушы!</p>
+    
+    <p>ХХІ ғасырдың ең өзекті және практикалық маңызы бар ғылымдарының бірі – Ықтималдық және Статистика әлеміне қош келдіңіз!</p>
+    
+    <p>Көп адамдар үшін бұл тақырып құрғақ формулалар мен күрделі есептердің жиынтығы болып көрінуі мүмкін. Алайда, шын мәнінде, бұл ғылым – белгісіздік әлемін жүйелеуге, болашақты болжауға және ақпаратқа негізделген ең дұрыс шешімдер қабылдауға мүмкіндік беретін әмбебап құрал.</p>
+    
+    <h3 style="color: var(--primary-accent); margin-top: 25px;"><i class="fas fa-star" style="margin-right: 10px;"></i> Неліктен бұл пән сіз үшін маңызды?</h3>
+    <p>Бүгінгі таңда деректер (Data) – ең құнды ресурс. Сіздің статистикалық ойлау қабілетіңіз тек университеттік бағдарламаны игеруге ғана емес, сонымен қатар кез келген заманауи мамандықта (IT, қаржы, медицина, инженерия, әлеуметтану) табысқа жетудің негізі болады.</p>
+    
+    <p>Осы курсты оқу арқылы сіз:</p>
+    <ul style="list-style-type: none; padding-left: 20px;">
+        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--secondary-accent); margin-right: 8px;"></i> Тәуекелдерді басқаруды үйренесіз: Инвестициялық шешім қабылдаудан бастап, күнделікті өмірдегі маңызды таңдауларға дейін.</li>
+        <li style="margin-bottom: 10px;"><i class="fas fa-check-circle" style="color: var(--secondary-accent); margin-right: 8px;"></i> Жасанды интеллект (AI) негіздерін түсінесіз: Барлық AI және машиналық оқыту алгоритмдерінің түпкі негізі ықтималдық теориясына сүйенеді.</li>
+        <li><i class="fas fa-check-circle" style="color: var(--secondary-accent); margin-right: 8px;"></i> Сыни ойлауды дамытасыз: Кез келген деректің артында тұрған "шындықты" анықтап, манипуляциялық ақпараттан қорғануды үйренесіз.</li>
+    </ul>
+    
+    <h3 style="color: var(--primary-accent); margin-top: 35px;"><i class="fas fa-rocket" style="margin-right: 10px;"></i> Электронды оқулықтың ерекшеліктері</h3>
+    <p>Бұл электронды оқу-әдістемелік құрал тек мәтіндік ақпарат берумен шектелмейді. Біз оқу процесін барынша қызықты әрі тиімді ету үшін заманауи интерактивті элементтерді біріктірдік:</p>
+    
+    <ul style="list-style-type: disc; padding-left: 30px; color: var(--text-dark);">
+        <li style="margin-bottom: 5px;">Модульдік Теория: Күрделі ұғымдарды жеңілдетілген, жеке тақырыптарға бөліп оқу.</li>
+        <li style="margin-bottom: 5px;">Практикалық Лаборатория (Симуляция): Теориялық заңдардың (мысалы, Үлкен сандар заңы) қалай жұмыс істейтінін өз қолыңызбен тәжірибе жасау арқылы көресіз.</li>
+        <li style="margin-bottom: 5px;">Тестілеу және XP жүйесі: Әрбір дұрыс жауап пен орындалған тапсырма үшін тәжірибе ұпайларын (XP) жинап, өзіңіздің оқу прогресіңізді және деңгейіңізді көтересіз.</li>
+        <li>Көрнекі материалдар: Видеосабақтар мен глоссарий арқылы терминдерді тез меңгересіз.</li>
+    </ul>
+
+    <p style="margin-top: 30px;">Бұл оқулық сіздің математикалық ойлауыңызды жаңа деңгейге көтереді деген үміттемін. Қадам жасаңыз – сандар сөйлейтін, ал белгісіздік өлшенетін әлем сізді күтуде!</p>
+
+    <p style="margin-top: 30px; font-weight: 700; color: var(--text-dark);">Ізгі тілекпен, Аяулым</p>
+</section>
+
+            <section id="theory" class="section">
+                <h2>Теориялық модульдер</h2>
+                <div id="theoryGrid" class="grid-layout"></div>
+            </section>
+
+            <section id="practice" class="section">
+                <h2>Практикалық жаттығулар</h2>
+                <div id="practiceGrid" class="grid-layout"></div>
+            </section>
+
+            <section id="videolesson" class="section">
+                <h2>Видеосабақтар</h2>
+                <p>Күрделі ұғымдарды оңай түсінуге арналған анимациялық сабақтар:</p>
+                <div style="background:#f8f9fa; padding:30px; border-radius:10px; box-shadow:var(--shadow-light);">
+                    <h3><i class="fas fa-list icon-small"></i> Бейне жоспары</h3>
+                    <ul style="list-style:none; line-height:2;">
+                        <li style="color:var(--success);"><i class="fas fa-check-circle icon-small"></i> Ықтималдылық</li>
+                        <li style="color:var(--success);"><i class="fas fa-check-circle icon-small"></i> Статистика</li>
+                        <li style="color:var(--success);"><i class="fas fa-check-circle icon-small"></i> Үлкен сандар заңы</li>
+                    </ul>
+                </div>
+                                    
+                    
+                   <div style="text-align: center; margin-top: 20px;">
+    <a href="https://youtu.be/zIms6vwSYGc" target="_blank" class="start-btn" 
+       style="background-color:#FF0000; padding:10px 25px; font-size:1rem; margin-right: 10px;">
+        <i class="fab fa-youtube"></i> Видео 1     </a>
+
+    <a href="https://youtu.be/J0snxcNqvH4?si=4Scxs9tDhwX3U16Z" target="_blank" class="start-btn" 
+       style="background-color:#FF0000; padding:10px 25px; font-size:1rem;">
+        <i class="fab fa-youtube"></i> Видео 2 
+    </a>
+</div>
+                                            </a>
+                </div>
+            </section>
+
+            <section id="game" class="section">
+                <h2>Симуляция (Ықтималдық лабораториясы)</h2>
+                <div class="sim-panel" style="background:#f8f9fa; padding:30px; border-radius:10px; text-align:center; box-shadow:var(--shadow-light);">
+                    <h3><i class="fas fa-dice icon-small"></i> Тиын лақтыру</h3>
+                    <p style="color:var(--text-secondary)">Тәжірибе санын енгізіңіз (100-10000):</p>
+                    <input type="number" id="simCount" value="1000" min="10" max="10000" style="padding:8px; font-size:1rem; margin:15px 0; border-radius:5px; border:2px solid var(--primary-accent); background:var(--bg-card); color:var(--text-dark);">
+                    <button onclick="runStatsSimulation()" class="start-btn" style="background:var(--secondary-accent);"> Іске Қосу</button>
+                    <div id="simResult" style="font-size:1.1rem; font-weight:600; margin-top:20px; color:var(--primary-accent);"></div>
+                </div>
+            </section>
+
+            <section id="glossary" class="section">
+                <h2>Статистикалық терминдер</h2>
+                <div class="glossary-letters" id="glossaryLetters" style="margin-bottom:20px;"></div>
+                <div id="glossaryList"></div>
+            </section>
+
+            <section id="test1" class="section">
+                <h2>Тест (10 Сұрақ)</h2>
+                <p style="margin-bottom:20px; color:var(--text-secondary);">Барлық сұрақтарға жауап беріп, біліміңізді тексеріңіз.</p>
+                <div id="quiz1Container"></div>
+                <button class="start-btn" onclick="checkTest(1)" style="margin:20px 0; background:var(--primary-accent);">Нәтижені тексеру</button>
+                <div id="res1" style="font-weight:700; font-size:1.4rem; color:var(--primary-accent);"></div>
+            </section>
+            
+            <section id="reflection" class="section">
+                <h2>Рефлексия (Өзіндік бағалау)</h2>
+                <p style="margin-bottom:20px; color:var(--text-secondary);">Курс туралы пікіріңізді қалдырыңыз.</p>
+                <textarea id="refText" style="width:100%; height:150px; padding:15px; border-radius:10px; border:2px solid var(--border-color-light); background:var(--bg-card); color:var(--text-dark); font-family:inherit; font-size:1rem;" placeholder="Ойыңыз..."></textarea>
+                <button class="start-btn" onclick="saveReflection()" style="margin:15px 0; background:var(--success);">Пікірді сақтау </button>
+                <div id="refHistory" style="margin-top:30px; border-top:1px solid var(--border-color-light); padding-top:20px;"></div>
+            </section>
+
+            <section id="conclusion" class="section">
+                <h2>Қорытынды</h2>
+                <p style="color:var(--text-secondary)">Сіз "Ықтималдық және Статистика" бағдарламасын сәтті аяқтадыңыз. Сіз енді статистикалық деректерді талдауға және интерпретациялауға дайынсыз!</p>
+            </section>
+            
+        </main>
+
+        <footer style="padding:20px; text-align:center; color:var(--text-secondary); opacity:0.8; font-size:0.9rem;">
+             <div style="margin-bottom:15px;">&copy; Барлық құқықтар қорғалған.</div>
+            <div class="social-links">
+                <a href="https://www.instagram.com/azymkhanovna_a?igsh=anRnOWNkbmFiMDVt&utm_source=qr" target="_blank" style="color:var(--primary-accent); margin: 0 10px;"><i class="fab fa-instagram"></i></a>
+                <a href="https://t.me/azymkhanovna_a" target="_blank" style="color:var(--secondary-accent); margin: 0 10px;"><i class="fab fa-telegram"></i></a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // =======================================================
+        // 2. JAVASCRIPT: МӘСЕЛЕНІ ШЕШУГЕ АРНАЛҒАН БЛОК
+        // =======================================================
+
+        // Глобалды деректер
+        let userXP = 0; let userLevel = 1;
+
+        // --- DATA: Theory (10 тақырып) ---
+        const theoryItems = [
+            {t:"Ықтималдық Негіздері", i:"fas fa-dice", c:"#3b82f6", content:`<h3>1. Анықтама</h3><p>Ықтималдық-кездейсоқ оқиғаның орындалу мүмкіндігінің сандық өлшемі. 0<=P(A)<=1.</p><h3>2. Классикалық формула</h3><p> P(A) = m/n, мұнда m – қолайлы нәтижелер, n – барлық мүмкін нәтижелер.</p>`},
+            {t:"Оқиға Түрлері", i:"fas fa-random", c:"#10b981", content:`<h3>1. Кездейсоқ оқиға</h3><p>Орындалуы мүмкін де, мүмкін емес те оқиға.</p><h3>2. Ақиқат оқиға</h3><p>Міндетті түрде орындалатын оқиға (P(A)=1).</p><h3>3. Мүмкін емес оқиға</h3><p>Ешқашан орындалмайтын оқиға (P(A)=0).</p>`},
+            {t:"Кездейсоқ Шамалар", i:"fas fa-chart-line", c:"#3b82f6", content:`<h3>1. Анықтама</h3><p>Сынақ нәтижесіне байланысты мәні өзгеретін шама.</p><h3>2. Түрлері</h3><p>Дискретті (саналатын) және Үздіксіз.</p>`},
+            {t:"Математикалық Күтім", i:"fas fa-bullseye", c:"#ef4444", content:`<h3>1. Анықтама</h3><p>Кездейсоқ шаманың орташа мәні. M(X) немесе E(X).</p>`},
+            {t:"Дисперсия", i:"fas fa-wave-square", c:"#8b5cf6", content:`<h3>1. Анықтама</h3><p>Кездейсоқ шаманың математикалық күтімнен шашырау дәрежесі. D(X).</p>`},
+            {t:"Үлкен Сандар Заңы", i:"fas fa-balance-scale", c:"#10b981", content:`<h3>1. Анықтама</h3><p>Тәжірибе саны артқан сайын, оқиғаның жиілігі оның теориялық ықтималдығына жақындайды.</p>`},
+            {t:"Орташа Мән, Медиана, Мода", i:"fas fa-table", c:"#3b82f6", content:`<h3>1. Орташа мән</h3><p>Арифметикалық орта.</p><h3>2. Медиана</h3><p>Реттелген қатардың ортасындағы мән.</p><h3>3. Мода</h3><p>Ең жиі кездесетін мән.</p>`},
+            {t:"Нормальді Үлестірім", i:"fas fa-bell", c:"#f59e0b", content:`<h3>1. Анықтама</h3><p>Кездейсоқ шамалардың табиғатта жиі кездесетін үлестірім формасы (Қоңырау пішінді қисық).</p>`},
+            {t:"Корреляция", i:"fas fa-link", c:"#ef4444", content:`<h3>1. Анықтама</h3><p>Екі шама арасындағы статистикалық байланыс бар ма, жоқ па – соны анықтайды.</p>`},
+            {t:"Жиілік Кестелері", i:"fas fa-chart-pie", c:"#8b5cf6", content:`<h3>1. Анықтама</h3><p>Деректердің жиілігін және салыстырмалы жиілігін көрсететін кесте.</p>`}
+        ];
+
+        // --- DATA: Practice (Есептер) ---
+        const practiceData = [
+            {q: "Сүйекті лақтырғанда тақ сан түсу ықтималдығы қандай?", a: "3/6 немесе 0.5", fact: "Тақ сандар: 1, 3, 5 (үшеу). Барлық мүмкін нәтиже: 6."},
+            {q: "Деректер қатары: 5, 2, 8, 2, 9. Модасы қандай?", a: "2", fact: "Мода – ең жиі қайталанатын мән."},
+            {q: "Екі тиынды лақтырғанда, екеуі де «Елтаңба» түсу ықтималдығы?", a: "1/4 немесе 0.25", fact: "Мүмкін нәтижелер: (Е,Е), (Е,Ц), (Ц,Е), (Ц,Ц). Қолайлысы: 1."},
+            {q: "Деректер қатары: 10, 5, 20, 15, 30. Медианасы қандай?", a: "15", fact: "Реттелген қатар: 5, 10, 15, 20, 30. Ортасы – 15."},
+            {q: "Сыныпта 10 ұл, 15 қыз бар. Кездейсоқ таңдалған оқушының ұл болу ықтималдығы?", a: "10/25 немесе 0.4", fact: "Ықтималдық = (Ұлдар саны) / (Жалпы оқушы саны)."},
+            {q: "Дисперсияның квадрат түбірі қалай аталады?", a: "Стандартты ауытқу ", fact: "Стандартты ауытқу шашырауды бастапқы өлшем бірлігінде көрсетеді."},
+            {q: "Екі тәуелсіз оқиғаның бірге орындалу ықтималдығын қалай табамыз?", a: "Олардың ықтималдықтарын көбейту арқылы", fact: "Көбейту теоремасы."},
+            {q: "Теріс корреляция нені білдіреді?", a: "Бір шама өскенде, екіншісі кемиді", fact: "Мысалы, Аяқ киім бағасы мен сатылым саны (әдетте)."},
+            {q: "Егер P(A)=0 болса, оқиға қалай аталады?", a: "Мүмкін емес оқиға", fact: "Ешқашан орындалмайтын оқиға."},
+            {q: "Тек екі нәтижесі бар сынақ қалай аталады?", a: "Бернулли сынағы", fact: "Биномдық үлестірімнің негізі."},
+            {q: "5, 5, 5, 5 деген деректер қатарының дисперсиясы қандай?", a: "0", fact: "Егер барлық мән бірдей болса, шашырау болмағандықтан дисперсия 0-ге тең."},
+            {q: "Медиананы табу үшін деректерді не істеу керек?", a: "Реттеу", fact: "Медиананы табу үшін деректерді өсу немесе кему ретімен орналастыру қажет."},
+        ];
+// --- DATA: Glossary (Сөздік) ---
+const glossaryData = [
+    {t:"Ақиқат оқиға", d:"Сынақ нәтижесінде міндетті түрде орындалатын оқиға (Ықтималдығы P(A)=1)."},
+    {t:"Ауытқу ауқымы", d:"Деректер қатарындағы ең үлкен мән мен ең кіші мәннің айырмасы."},
+    {t:"Бас жиынтық", d:"Зерттеуге жататын барлық элементтердің толық жиынтығы."},
+    {t:"Бернулли сынағы", d:"Тек екі ғана нәтижесі (сәттілік/сәтсіздік) бар кездейсоқ эксперимент."},
+    {t:"Дисперсия", d:"Кездейсоқ шаманың математикалық күтімнен шашырау дәрежесін көрсететін сан. (D(X))."},
+    {t:"Дискретті шама", d:"Саналуы мүмкін, шектеулі немесе шексіз бүтін мәндерді ғана қабылдайтын кездейсоқ шама."},
+    {t:"Жиілік", d:"Деректер жиынтығында белгілі бір мәннің қайталану саны."},
+    {t:"Кездейсоқ шама", d:"Мәні сынақ нәтижесіне байланысты өзгеретін шама."},
+    {t:"Корреляция", d:"Екі кездейсоқ шама арасындағы сызықтық байланыстың тығыздығы мен бағыты."},
+    {t:"Математикалық күтім", d:"Кездейсоқ шаманың ұзақ мерзімді орташа мәні; оның 'орталығы' (M(X))."},
+    {t:"Медиана", d:"Реттелген деректер қатарының ортасындағы мән."},
+    {t:"Мода", d:"Деректер жиынтығында ең жиі кездесетін мән."},
+    {t:"Мүмкін емес оқиға", d:"Ешқашан орындалмайтын оқиға (Ықтималдығы P(A)=0)."},
+    {t:"Нормальді үлестірім", d:"'Қоңырау пішінді қисықпен' сипатталатын үздіксіз ықтималдық үлестірімі."},
+    {t:"Нөлдік гипотеза", d:"Статистикалық тестте теріске шығаруға тырысатын бастапқы тұжырым."},
+    {t:"Орташа мән", d:"Арифметикалық орта."},
+    {t:"Стандартты ауытқу", d:"Дисперсияның квадрат түбірі (шашырау дәрежесі)."},
+    {t:"Сынама", d:"Бас жиынтықтың кішірейтілген бөлігі (іріктеме)."},
+    {t:"Тәуелді оқиғалар", d:"Бір оқиғаның орындалуы екінші оқиғаның ықтималдығына әсер ететін оқиғалар."},
+    {t:"Тәуелсіз оқиғалар", d:"Бір оқиғаның орындалуы екіншісінің ықтималдығына әсер етпейтін оқиғалар."},
+    {t:"Үлкен сандар заңы", d:"Тәжірибе саны артқан сайын, салыстырмалы жиілік теориялық ықтималдыққа жақындайды."},
+    {t:"Ықтималдық", d:"Кездейсоқ оқиғаның орындалу мүмкіндігінің сандық өлшемі (0 ≤ P(A) ≤ 1)."},
+];        // --- TEST 1 (10 СҰРАҚ) ---
+        const quiz1Data = [
+            { q: "Ықтималдықтың ең үлкен мәні қандай?", o: ["0", "0.5", "1"], a: 2 },
+            { q: "Деректер қатарында ең жиі кездесетін мән?", o: ["Медиана", "Мода", "Орташа мән"], a: 1 },
+            { q: "Екі тәуелсіз оқиғаның ықтималдығын табу үшін не істейміз?", o: ["Қосамыз", "Көбейтеміз", "Бөлеміз"], a: 1 },
+            { q: "Сүйекті лақтырғанда 7 саны түсу ықтималдығы?", o: ["1/6", "0", "1"], a: 1 },
+            { q: "Үлкен сандар заңы нені сипаттайды?", o: ["Жиілік пен ықтималдықтың жақындауын", "Дисперсияның өсуін", "Моданың өзгеруін"], a: 0 },
+            { q: "Дисперсияның квадрат түбірі?", o: ["Ауытқу ауқымы", "Стандартты ауытқу", "Корреляция"], a: 1 },
+            { q: "Екі оқиға бір-біріне әсер етпесе, олар қалай аталады?", o: ["Тәуелді", "Тәуелсіз", "Үйлесімді"], a: 1 },
+            { q: "Кездейсоқ шама ғана қабылдай алатын мәндер?", o: ["Дискретті", "Үздіксіз", "Жалпы"], a: 0 },
+            { q: "Реттелген деректер қатарының ортасындағы мән?", o: ["Орташа мән", "Медиана", "Мода"], a: 1 },
+            { q: "Қоңырау пішінді үлестірім қалай аталады?", o: ["Симметриялы", "Нормальді", "Биномдық"], a: 1 },
+        ];
+
+
+        // --- ФУНКЦИЯЛАР БЛОГЫ ---
+
+        function addXP(amount) {
+            let xp = parseInt(localStorage.getItem('userXP') || 0);
+            let lvl = parseInt(localStorage.getItem('userLVL') || 1);
+            xp += amount;
+            const levelThreshold = lvl * 100;
+            if(xp >= levelThreshold) { lvl++; xp -= levelThreshold; alert(`Level Up! Құттықтаймыз! Сіз ${lvl} деңгейге өттіңіз!`); }
+            localStorage.setItem('userXP', xp); localStorage.setItem('userLVL', lvl);
+            document.getElementById('xpVal').innerText = xp; document.getElementById('lvl').innerText = lvl;
+            document.getElementById('xpFill').style.width = (xp/(levelThreshold)*100)+'%';
+        }
+
+        // БАТЫРМА МӘСЕЛЕСІН ШЕШЕТІН НЕГІЗГІ ФУНКЦИЯ
+        function startApp() {
+            // XP/LVL дисплейін жаңарту
+            addXP(0); 
+
+            // #cover-ді жабу және #app-ті ашу
+            document.getElementById('cover').style.display = 'none';
+            document.getElementById('app').style.display = 'block'; 
+            
+            // Контентті рендеринг және навигацияны орнату
+            renderAll();
+            renderNav();
+            nav('home'); // Бастаған кезде Басты бетті көрсету
+        }
+
+        function renderNav() {
+            const sections = [
+                { id: 'home', icon: 'fas fa-home', title: 'Басты' },
+                { id: 'intro', icon: 'fas fa-info-circle', title: 'Алғы сөз' },
+                { id: 'theory', icon: 'fas fa-book', title: 'Теория' },
+                { id: 'practice', icon: 'fas fa-pencil-alt', title: 'Практика' },
+                { id: 'videolesson', icon: 'fas fa-play', title: 'Видео' },
+                { id: 'game', icon: 'fas fa-dice', title: 'Симуляция' },
+                { id: 'glossary', icon: 'fas fa-font', title: 'Глоссарий' },
+                { id: 'test1', icon: 'fas fa-check-double', title: 'Тест' },
+                { id: 'reflection', icon: 'fas fa-comment', title: 'Рефлексия' },
+                { id: 'conclusion', icon: 'fas fa-trophy', title: 'Қорытынды' }
+            ];
+
+            const navList = document.getElementById('navList');
+            navList.innerHTML = sections.map(s => `
+                <li><a href="#" class="nav-link" data-section="${s.id}" onclick="nav('${s.id}')">
+                    <i class="${s.icon}"></i> ${s.title}
+                </a></li>
+            `).join('');
+            
+            // Навигациялық сілтемелерді тыңдау
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                    nav(this.getAttribute('data-section'));
+                });
+            });
+        }
+
+
+        function nav(id) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            
+            document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+            const activeLink = document.querySelector(`.nav-link[data-section="${id}"]`);
+            if (activeLink) activeLink.classList.add('active');
+
+            window.scrollTo(0, 0);
+        }
+
+        function renderAll() {
+            // Theory
+            document.getElementById('theoryGrid').innerHTML = theoryItems.map(t=>`
+                <div class="module-card" style="border-left-color: ${t.c}" onclick='showTheory("${t.t}", \`${t.content}\`)'>
+                    <h3 style="color: ${t.c}"><i class="${t.i} icon-small"></i> ${t.t}</h3>
+                    <p style="font-size:13px; color:var(--text-secondary)">Толығырақ ашу</p>
+                </div>
+            `).join('');
+
+            // Practice
+            document.getElementById('practiceGrid').innerHTML = practiceData.map((p,i)=>`
+                <div class="module-card" onclick="toggleAns(this)" style="border-left-color: var(--secondary-accent);">
+                    <h4 style="font-size:1rem; color:var(--text-dark)">Есеп №${i+1}: ${p.q}</h4>
+                    <div class="ans" style="display:none; color:var(--primary-accent); font-weight:700; margin-top:10px;">
+                        Жауабы: ${p.a}
+                        <div style="background:#f0fff0; padding:10px; border-radius:5px; border-left:3px solid var(--success); margin-top:10px; color:var(--text-dark); font-weight:400;">
+                           💡 <b>Түсініктеме:</b> ${p.fact}
+                        </div>
+                    </div>
+                    <div style="font-size:12px; opacity:0.6; margin-top:10px;">(Жауабын көру үшін басыңыз)</div>
+                </div>
+            `).join('');
+
+            // Glossary
+            const letters = [...new Set(glossaryData.map(g=>g.t[0]))].sort();
+            document.getElementById('glossaryLetters').innerHTML = letters.map(l=>
+                `<button class="start-btn" style="padding: 10px 15px; margin: 5px; font-size: 0.9rem;" onclick="filterGlossary('${l}', this)">${l}</button>`
+            ).join('');
+            if(letters.length > 0) filterGlossary(letters[0], document.querySelector('.glossary-letters button'));
+
+            // Quiz Render
+            renderQuiz('quiz1Container', quiz1Data, 1);
+        }
+
+
+        function toggleAns(el) {
+            const ans = el.querySelector('.ans');
+            ans.style.display = ans.style.display==='none'?'block':'none';
+            if(ans.style.display==='block') addXP(5);
+        }
+
+        function filterGlossary(l, btn) {
+            document.querySelectorAll('.glossary-letters button').forEach(b=>b.classList.remove('active'));
+            if(btn) btn.classList.add('active');
+            document.getElementById('glossaryList').innerHTML = glossaryData.filter(g=>g.t.startsWith(l)).map(g=>`
+                <div style="background:#f8f9fa; padding:15px; border-radius:8px; margin-bottom:10px; border-left:4px solid var(--secondary-accent);">
+                    <h4 style="color:var(--primary-accent); margin-bottom:5px;">${g.t}</h4>
+                    <p style="color:var(--text-secondary);">${g.d}</p>
+                </div>
+            `).join('');
+        }
+
+        function showTheory(t, c) {
+            document.getElementById('theoryModalBody').innerHTML = `
+                <h2 style="color:var(--primary-accent); margin-bottom:20px;">${t}</h2>
+                <div style="padding:15px; background:#f8f9fa; border-radius:10px; border:1px solid var(--border-color-light);">${c}</div>
+                <button class="start-btn" style="margin-top:20px; background:var(--success);" onclick="document.getElementById('theoryModal').style.display='none'; addXP(10);">Түсінікті </button>
+            `;
+            document.getElementById('theoryModal').style.display = 'flex';
+        }
+
+        function openVideoModal() { 
+            document.getElementById('videoModal').style.display='flex'; 
+            document.getElementById('fullVideo').play(); 
+        }
+        function closeVideoModal() { 
+            document.getElementById('videoModal').style.display='none'; 
+            document.getElementById('fullVideo').pause(); 
+        }
+        
+        // --- QUIZ LOGIC (10 Qs) ---
+        const userAnswers = { 1: {} };
+        
+        function renderQuiz(id, data, num) {
+            const container = document.getElementById(id);
+            container.innerHTML = '';
+            data.forEach((item, idx) => {
+                let optsHTML = item.o.map((opt, oIdx) => 
+                    `<div class="quiz-opt" onclick="selectOpt(${num}, ${idx}, ${oIdx})">${opt}</div>`
+                ).join('');
+                
+                container.innerHTML += `
+                    <div class="quiz-item" id="q-${num}-${idx}" style="margin-bottom: 25px;">
+                        <h4 style="margin-bottom:15px;">${idx+1}. ${item.q}</h4>
+                        ${optsHTML}
+                    </div>
+                `;
+            });
+        }
+
+        function selectOpt(testNum, qIdx, oIdx) {
+            userAnswers[testNum][qIdx] = oIdx;
+            const parent = document.getElementById(`q-${testNum}-${qIdx}`);
+            parent.querySelectorAll('.quiz-opt').forEach((el, i) => {
+                el.classList.remove('selected');
+                if(i === oIdx) el.classList.add('selected');
+            });
+        }
+
+        function checkTest(num) {
+            const data = quiz1Data; 
+            let score = 0;
+            let answeredCount = 0;
+
+            data.forEach((item, idx) => {
+                const ans = userAnswers[num][idx];
+                const parent = document.getElementById(`q-${num}-${idx}`);
+                const opts = parent.querySelectorAll('.quiz-opt');
+
+                if (ans !== undefined) {
+                    answeredCount++;
+                }
+                
+                opts.forEach((el, i) => {
+                    el.classList.remove('correct', 'wrong');
+                    if(i === item.a) el.classList.add('correct');
+                    if(i === ans && i !== item.a) el.classList.add('wrong');
+                });
+                if(ans === item.a) score++;
+            });
+            
+            if (answeredCount < data.length) {
+                document.getElementById(`res${num}`).innerHTML = `<span style="color: var(--error);">Барлық ${data.length} сұраққа жауап беріңіз.</span>`;
+                return;
+            }
+
+            document.getElementById(`res${num}`).innerHTML = `Нәтиже: <span style="color:${score > 5 ? 'var(--success)' : 'var(--error)'}">${score} / ${data.length}</span>`;
+            addXP(score * 10);
+        }
+
+        function runStatsSimulation() {
+            const count = parseInt(document.getElementById('simCount').value);
+            const resultEl = document.getElementById('simResult');
+
+            if (isNaN(count) || count < 10 || count > 10000) {
+                resultEl.innerHTML = `<span style="color: var(--error);">Тәжірибе санын 10-нан 10000-ға дейін енгізіңіз.</span>`;
+                return;
+            }
+
+            let heads = 0; 
+            for (let i = 0; i < count; i++) {
+                if (Math.random() < 0.5) {
+                    heads++;
+                }
+            }
+            const tails = count - heads;
+            const frequency = (heads / count).toFixed(4);
+
+            resultEl.innerHTML = `
+                <p><strong>Жалпы лақтыру:</strong> ${count}</p>
+                <p><strong>Елтаңба:</strong> ${heads} рет</p>
+                <p><strong>Цифр:</strong> ${tails} рет</p>
+                <p style="margin-top:10px;"><strong>Елтаңба жиілігі:</strong> <span style="color: var(--primary-accent); font-size: 1.2em;">${frequency}</span></p>
+                <p style="font-size: 0.9em; opacity: 0.7;">(Теориялық ықтималдық: 0.5. Көп рет лақтырған сайын, 0.5-ке жақындайды)</p>
+            `;
+             addXP(20);
+        }
+
+        function saveReflection() {
+            const v = document.getElementById('refText').value;
+            if(v) { 
+                document.getElementById('refHistory').innerHTML += `<div style="background:var(--bg-light); padding:10px; border-radius:5px; margin-top:10px; border-left: 3px solid var(--primary-accent);">${v}</div>`; 
+                addXP(10); document.getElementById('refText').value=''; 
+            }
+        }
+
+        // --- БАСТАПҚЫ ОРНАТУ ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // "САБАҚТЫ БАСТАУ" батырмасының жұмысын қамтамасыз ету үшін
+            // DOMContentLoaded кезінде XP жүйесін іске қосу
+            addXP(0); 
+        });
+
+        // Бастапқы рендеринг
+        renderQuiz('quiz1Container', quiz1Data, 1);
+        
+    </script>
+</body>
+</html>
